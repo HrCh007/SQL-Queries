@@ -2,6 +2,8 @@ CREATE DATABASE IF NOT EXISTS office;
 
 USE office;
 
+-- Creating Employee table
+
 CREATE TABLE Employee(
 	ID INT NOT NULL,
     Name VARCHAR (255),
@@ -9,12 +11,10 @@ CREATE TABLE Employee(
     PRIMARY KEY (ID)
 );
 
+-- Inserting values into employee table
+
 INSERT INTO Employee
 VALUES(1,'Hrithik', 'Gurgaon');
-
-Use office;
-
-SELECT * FROM Employee;
 
 INSERT INTO Employee
 VALUES
@@ -31,14 +31,18 @@ INSERT INTO Employee VALUES
 	(8,'Tina', 'Noida'),
     (9,'Jack', 'Delhi'),
     (10,'Hardik', 'Gurgaon'),
-    (11, 'Ken', 'Gurgaon');
+    (11, 'Ken', 'Gurgaon'),
+    (12, 'Kevin', 'Noida');
 
-    
+-- Creating Swipes table    
+
 CREATE TABLE Swipes(
 	ID INT NOT NULL,
     Swipe_Date DATE,
     Swipe_time TIME
 );
+
+-- Inserting values into Swipes table
 
 INSERT INTO Swipes VALUES
 	(1, '2022-06-20', '08:50:45'),
@@ -88,7 +92,7 @@ INSERT INTO Swipes VALUES
     
 
 
--- 1st Query: Give name of employees that worked at least 2 days from office.
+-- Print name of employees that worked at least 2 days from office.
 
 SELECT E.Name
 FROM Employee E
@@ -113,6 +117,12 @@ LEFT JOIN Swipes S
 	ON E.ID = S.ID
 GROUP BY E.ID
 HAVING COUNT(S.ID) = 0;
+-- Alternate for above query
+SELECT E.name
+FROM Employee E 
+LEFT JOIN Swipes S 
+	ON E.ID = S.ID
+WHERE S.ID IS NULL;
 
 -- Print Location where most employees ae working from home
 
@@ -124,7 +134,7 @@ GROUP BY E.Location
 ORDER BY COUNT(S.ID) ASC
 LIMIT 1;
 
--- Print name of employees who have not completed hours (8:30 hours) 
+-- Print name of employees who have not completed minimum hours (8:30 hours) 
 
 SELECT E.name, S2.Swipe_Date, TIMEDIFF(S2.swipe_time,S1.swipe_time) as Total_hours
 FROM Swipes S1
@@ -137,10 +147,26 @@ JOIN Swipes S2
 JOIN Employee E 
 	ON S1.ID = E.ID 
     AND S2.ID = E.ID;
-    
--- Total number of employees who have not completed hours
+
+-- Total number of employees who have not completed minimum hours (8:30 hours)
 
 SELECT COUNT(DISTINCT S1.ID) AS No_of_employees_not_completing_hours           
+FROM Swipes S1
+JOIN Swipes S2
+	ON S1.ID = S2.ID 
+    AND S1.Swipe_Date = S2.Swipe_Date 
+    AND S1.Swipe_time != S2.Swipe_time 
+    AND S2.swipe_time > S1.Swipe_time 
+    AND TIMEDIFF(S2.swipe_time,S1.swipe_time) <= '08:30:00';
+
+-- Total number of employees who have not completed minimum hours (including wfh employees)
+
+SELECT COUNT(DISTINCT S1.ID) + 
+	(SELECT COUNT(E.name)
+	FROM Employee E 
+	LEFT JOIN Swipes S 
+		ON E.ID = S.ID
+	WHERE S.ID IS NULL) AS No_of_employees_not_completing_hours           
 FROM Swipes S1
 JOIN Swipes S2
 	ON S1.ID = S2.ID 
