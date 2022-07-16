@@ -35,8 +35,7 @@ INSERT INTO Employee VALUES
 CREATE TABLE Swipes(
 	ID INT NOT NULL,
     Swipe_Date DATE,
-    Swipe_time TIME,
-    FOREIGN KEY (ID) REFERENCES Employee(ID)
+    Swipe_time TIME
 );
 
 INSERT INTO Swipes VALUES
@@ -53,7 +52,7 @@ INSERT INTO Swipes VALUES
     (6, '2022-06-20', '17:50:45'),
     (7, '2022-06-20', '19:50:45'),
     (1, '2022-06-20', '17:50:45'),
-    (4, '2022-06-21', '19:50:45'),
+    (4, '2022-06-20', '19:50:45'),
 	(2, '2022-06-21', '08:55:45'),
     (4, '2022-06-21', '09:50:45'),
     (6, '2022-06-21', '07:52:45'),
@@ -123,3 +122,8 @@ GROUP BY E.Location
 ORDER BY COUNT(S.ID) ASC
 LIMIT 1;
 
+-- 
+
+SELECT S1.*, S2.*, (S2.Swipe_time-S1.Swipe_time) as Total_hours
+FROM Swipes S1, Swipes S2
+WHERE S1.ID = S2.ID AND S1.Swipe_Date = S2.Swipe_Date AND S1.Swipe_time != S2.Swipe_time AND S2.swipe_time > S1.Swipe_time;
