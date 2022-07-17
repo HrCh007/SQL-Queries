@@ -159,19 +159,5 @@ JOIN Swipes S2
     AND S2.swipe_time > S1.Swipe_time 
     AND TIMEDIFF(S2.swipe_time,S1.swipe_time) <= '08:30:00';
 
--- Total number of employees who have not completed minimum hours (including wfh employees)
 
-SELECT COUNT(DISTINCT S1.ID) + 
-	(SELECT COUNT(E.name)
-	FROM Employee E 
-	LEFT JOIN Swipes S 
-		ON E.ID = S.ID
-	WHERE S.ID IS NULL) AS No_of_employees_not_completing_hours           
-FROM Swipes S1
-JOIN Swipes S2
-	ON S1.ID = S2.ID 
-    AND S1.Swipe_Date = S2.Swipe_Date 
-    AND S1.Swipe_time != S2.Swipe_time 
-    AND S2.swipe_time > S1.Swipe_time 
-    AND TIMEDIFF(S2.swipe_time,S1.swipe_time) <= '08:30:00';
 
