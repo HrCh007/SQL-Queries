@@ -1,4 +1,4 @@
--- Print Location where most employees ae working from home
+-- Print Location where most employees are working from home
 
 SELECT E.Location
 FROM Employee E 
