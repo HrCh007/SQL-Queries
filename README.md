@@ -1,7 +1,7 @@
 # SQL-Queries
 Aim:
   To create a database named office which contains tables Employee and Swipes.
-  And run the following queries on the above mentioned database.
+  And run the following queries on this database.
 
 1. Print name of employees that worked at least 2 days from office.
 2. Print Name and number of days present in office for a employee.
