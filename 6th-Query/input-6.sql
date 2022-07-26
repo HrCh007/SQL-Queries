@@ -5,5 +5,5 @@ FROM Swipes S1
 JOIN Swipes S2
 	ON S1.ID = S2.ID 
     AND S1.Swipe_Date = S2.Swipe_Date 
-    AND S2.swipe_time > S1.Swipe_time 
-    AND TIMEDIFF(S2.swipe_time,S1.swipe_time) <= '08:30:00';
+    AND S2.Swipe_time > S1.Swipe_time 
+    AND TIMEDIFF(S2.Swipe_time,S1.Swipe_time) <= '08:30:00';
